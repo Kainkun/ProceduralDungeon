@@ -43,6 +43,7 @@ public class SceneBuilder : MonoBehaviour
         buildScene(currentRoom);
         setPlayer();
 
+        checkForHashClones(10);
     }
 
 
@@ -180,5 +181,29 @@ public class SceneBuilder : MonoBehaviour
 
         currentRoom = tempRoom;
         return currentRoom;
+    }
+
+
+    void checkForHashClones(int layers)
+    {
+        int clonecount = 0;
+        Dictionary<int, roomData> hash = new Dictionary<int, roomData>();
+        for (int i = 0; i <= layers; i++)
+        {
+            for (int p = 0; p <= Mathf.Pow(3, i); p++)
+            {
+                roomData room = new roomData((uint)i, (uint)p);
+                int num = room.GetHashCode();
+                if (hash.ContainsKey(num))
+                {
+                    print("1# " + hash[num].layerNumber + ", " + hash[num].roomNumber + ": " + hash[num].GetHashCode());
+                    print("2# " + room.layerNumber + ", " + room.roomNumber + ": " + room.GetHashCode());
+                    clonecount++;
+                }
+                else
+                    hash.Add(num, room);
+            }
+        }
+        print("clone count: " + clonecount);
     }
 }

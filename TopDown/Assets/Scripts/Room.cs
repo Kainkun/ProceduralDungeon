@@ -58,8 +58,8 @@ public class roomData
         unchecked
         {
             int hashcode = 23;
-            hashcode = (hashcode * 37) + (int)layerNumber;
-            hashcode = (hashcode * 37) + (int)roomNumber;
+            hashcode = (hashcode * 37) + (int)layerNumber.ToString().GetHashCode();
+            hashcode = (hashcode * 541) + (int)roomNumber.ToString().GetHashCode();
             return hashcode;
         }
     }
