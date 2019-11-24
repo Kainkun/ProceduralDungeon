@@ -43,7 +43,8 @@ public class SceneBuilder : MonoBehaviour
         buildScene(currentRoom);
         setPlayer();
 
-        checkForHashClones(10);
+        //checkForHashClones(13);
+        //checkForClonesGames(10000, 19);
     }
 
 
@@ -183,6 +184,48 @@ public class SceneBuilder : MonoBehaviour
         return currentRoom;
     }
 
+    void checkForClonesGames(int games, int layers)
+    {
+        int clonecount = 0;
+        Dictionary<int, roomData> hash = new Dictionary<int, roomData>();
+        for (int g = 0; g < games; g++)
+        {
+            print("game " + g);
+            roomData currentRoom = new roomData(0, 0);
+            for (int r = 0; r <= layers; r++)
+            {
+                Random.InitState((int)System.DateTime.Now.Ticks);
+                int rand = Random.Range(0, 3);
+                if (rand == 0)
+                {
+                    currentRoom = currentRoom.goLeft(currentRoom);
+                }
+                if (rand == 1)
+                {
+                    currentRoom = currentRoom.goMiddle(currentRoom);
+                }
+                if (rand == 2)
+                {
+                    currentRoom = currentRoom.goRight(currentRoom);
+                }
+                int chash = currentRoom.GetHashCode();
+
+                if (hash.ContainsKey(chash) && hash[chash].layerNumber != currentRoom.layerNumber)
+                {
+                    print("1# " + hash[chash].layerNumber + ", " + hash[chash].roomNumber + ": " + hash[chash].GetHashCode());
+                    print("2# " + currentRoom.layerNumber + ", " + currentRoom.roomNumber + ": " + currentRoom.GetHashCode());
+                    clonecount++;
+                }
+                else
+                {
+                    if(!hash.ContainsKey(chash))
+                        hash.Add(chash, currentRoom);
+                }
+
+            }
+        }
+        print("clone count: " + clonecount);
+    }
 
     void checkForHashClones(int layers)
     {
