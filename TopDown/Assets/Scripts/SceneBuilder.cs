@@ -11,15 +11,18 @@ public class SceneBuilder : MonoBehaviour
     [SerializeField]
     int minWidth, maxWidth, minHeight, maxHeight;
 
-    int currentWidth, currentHeight;
+    static int currentWidth, currentHeight;
 
-    int[,] terrainMap;
+    [HideInInspector]
+    public static int[,] terrainMap;
 
     [SerializeField]
     Tilemap groundMap, colliderMap;
 
     [SerializeField]
     RuleTile[] groundTiles, colliderTiles;
+    [SerializeField]
+    Tile[] wallTiles;
 
 
     roomData currentRoom;
@@ -41,7 +44,6 @@ public class SceneBuilder : MonoBehaviour
 
 
         buildScene(currentRoom);
-        setPlayer();
 
         //checkForHashClones(13);
         //checkForClonesGames(10000, 19);
@@ -85,7 +87,7 @@ public class SceneBuilder : MonoBehaviour
         terrainMap = null;
     }
 
-    void setTiles()
+    void rectangleTiles()
     {
         terrainMap = new int[currentWidth, currentHeight];
 
@@ -93,16 +95,124 @@ public class SceneBuilder : MonoBehaviour
         {
             for (int x = 0; x < currentWidth; x++)
             {
-                terrainMap[x, y] = Random.Range(0, 2);
+                terrainMap[x, y] = Random.Range(1, 2);
             }
         }
 
+    }
+
+    void randomWalkTiles(float fillPercent, float walkerSpawnChance, int maxWalkers)
+    {
+        terrainMap = new int[currentWidth, currentHeight];
+
+        int currentFill = 0;
+        int maxFill = (int)(currentWidth*currentHeight*fillPercent);
+
+        List<Walker> walkers = new List<Walker>();
+        walkers.Add(new Walker(currentWidth/2, currentHeight/2));
 
         for (int y = 0; y < currentHeight; y++)
         {
             for (int x = 0; x < currentWidth; x++)
             {
-                groundMap.SetTile(new Vector3Int(x - currentWidth / 2, y - 1, 0), groundTiles[0]);
+                terrainMap[x, y] = 1;
+            }
+        }
+
+        while (currentFill < maxFill)
+        {
+            for (int i = 0; i < walkers.Count; i++)
+            {
+                walkers[i].walk();
+                if (terrainMap[walkers[i].x, walkers[i].y] != 0)
+                {
+                    terrainMap[walkers[i].x, walkers[i].y] = 0;
+                    currentFill++;
+
+                    if(Random.Range(0f,1f) > walkerSpawnChance && walkers.Count < maxWalkers)
+                    {
+                        walkers.Add(new Walker(walkers[i].x, walkers[i].y));
+                    }
+                }
+            }
+
+        }
+
+    }
+    class Walker
+    {
+
+        public int x;
+        public int y;
+
+        public Walker(int setX, int setY)
+        {
+            x = setX;
+            y = setY;
+        }
+        public Walker(Vector2Int startPosition)
+        {
+            x = startPosition.x;
+            y = startPosition.y;
+        }
+        public void walk()
+        {
+
+            int moveDirection = Random.Range(1, 5);
+            if(moveDirection == 3)
+            {
+                if (y > 1)
+                    y--;
+                else
+                    y++;
+
+                return;
+            }
+
+            if (moveDirection == 2)
+            {
+                if (x < currentWidth - 2)
+                    x++;
+                else
+                    x--;
+
+                return;
+            }
+
+            if (moveDirection == 4)
+            {
+                if (x > 1)
+                    x--;
+                else
+                    x++;
+
+                return;
+            }
+
+            if (moveDirection == 1)
+            {
+                if (y < currentHeight - 2)
+                    y++;
+                else
+                    y--;
+
+                return;
+            }
+
+            Debug.LogError("walker stuck");
+        }
+    }
+
+    void setTiles()
+    {
+        for (int y = 0; y < currentHeight; y++)
+        {
+            for (int x = 0; x < currentWidth; x++)
+            {
+                if (terrainMap[x, y] == 1)
+                    colliderMap.SetTile(new Vector3Int(x - currentWidth / 2, y - 1, 0), wallTiles[Random.Range(0, wallTiles.Length)]);
+                else
+                    groundMap.SetTile(new Vector3Int(x - currentWidth / 2, y - 1, 0), groundTiles[0]);
             }
         }
     }
@@ -115,6 +225,11 @@ public class SceneBuilder : MonoBehaviour
         currentHeight = Random.Range(minHeight, maxHeight + 1);
 
         clearMap();
+        randomWalkTiles(0.2f, 0.02f, 5);
+        //rectangleTiles();
+
+        setPlayer();
+
         setTiles();
         buildDoors();
     }
@@ -140,6 +255,20 @@ public class SceneBuilder : MonoBehaviour
 
     void setPlayer()
     {
+        /*for (int y = 0; y < currentHeight; y++)
+        {
+            int flipyX = 0;
+            for (int x = 0; x < currentWidth; x++)
+            {
+                if (currentWidth % 2 == 0)
+                    flipyX = (int)Mathf.Ceil(currentWidth - x/2(0.5-x%2));
+                    flipyX = Mathf.Ceil(currentWidth - x / 2((0.5 - x % 2)) * 2) );
+
+                int flipyX = currentWidth%2 == 0  ?  Mathf.Ceil(currentWidth - x/2((0.5-x%2))*2) ) : Mathf.Floor(currentWidth - x/2((0.5-x%2))*2) ); //left right left right from center  
+            }
+        }*/
+        
+
         Player.player.transform.position = new Vector3(0, 0, 0);
     }
 

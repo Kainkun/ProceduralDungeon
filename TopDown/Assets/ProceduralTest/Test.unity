@@ -386,15 +386,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdbb1bbe0e4515e4c804fed914e64356, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minWidth: 3
-  maxWidth: 10
-  minHeight: 3
-  maxHeight: 10
+  minWidth: 50
+  maxWidth: 50
+  minHeight: 50
+  maxHeight: 50
   groundMap: {fileID: 46843551}
   colliderMap: {fileID: 2057181087}
   groundTiles:
   - {fileID: 11400000, guid: c8a4c3a041d72ad4dad5e17203de023e, type: 2}
   colliderTiles: []
+  wallTiles:
+  - {fileID: 11400000, guid: a4305b19587f1c142bd73b1b0b4db61f, type: 2}
+  - {fileID: 11400000, guid: a4305b19587f1c142bd73b1b0b4db61f, type: 2}
+  - {fileID: 11400000, guid: a4305b19587f1c142bd73b1b0b4db61f, type: 2}
+  - {fileID: 11400000, guid: a4305b19587f1c142bd73b1b0b4db61f, type: 2}
+  - {fileID: 11400000, guid: 84263aa3f237aa6448b97481b86b9893, type: 2}
   doorObject: {fileID: 987226714501674116, guid: 368db7ec34f80be419348ac5f6a011f8,
     type: 3}
 --- !u!4 &253165728
@@ -762,9 +768,7 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths:
-  - m_Collider: {fileID: 2057181089}
-    m_ColliderPaths: []
+  m_ColliderPaths: []
   m_CompositePaths:
     m_Paths: []
   m_VertexDistance: 0.0005
@@ -776,7 +780,7 @@ TilemapCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2057181084}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -793,7 +797,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2057181084}
-  m_BodyType: 0
+  m_BodyType: 2
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
