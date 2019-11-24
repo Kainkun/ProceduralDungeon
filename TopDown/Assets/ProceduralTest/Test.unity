@@ -386,13 +386,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdbb1bbe0e4515e4c804fed914e64356, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 10
-  height: 10
+  minWidth: 3
+  maxWidth: 10
+  minHeight: 3
+  maxHeight: 10
   groundMap: {fileID: 46843551}
   colliderMap: {fileID: 2057181087}
   groundTiles:
   - {fileID: 11400000, guid: c8a4c3a041d72ad4dad5e17203de023e, type: 2}
   colliderTiles: []
+  doorObject: {fileID: 987226714501674116, guid: 368db7ec34f80be419348ac5f6a011f8,
+    type: 3}
 --- !u!4 &253165728
 Transform:
   m_ObjectHideFlags: 0
@@ -559,6 +563,11 @@ PrefabInstance:
     - target: {fileID: 8640534546082240474, guid: 6c815a7971791994794971ebc5ca2785,
         type: 3}
       propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640534546082240474, guid: 6c815a7971791994794971ebc5ca2785,
+        type: 3}
+      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 8640534546082240455, guid: 6c815a7971791994794971ebc5ca2785,
