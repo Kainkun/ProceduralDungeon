@@ -263,23 +263,77 @@ Tilemap:
     m_Data:
       e00: NaN
       e01: NaN
-      e02: 8.179541e+21
+      e02: -6.1425465e-29
       e03: 0
       e10: NaN
       e11: NaN
-      e12: 1.85e-43
+      e12: 6e-45
       e13: 0
       e20: 0
-      e21: 8.179532e+21
+      e21: -6.142537e-29
       e22: 0
       e23: 0
       e30: 0
-      e31: 1.85e-43
+      e31: 6e-45
+      e32: 0
+      e33: 0
+  - m_RefCount: 0
+    m_Data:
+      e00: -1.1809895e-27
+      e01: 0
+      e02: 0
+      e03: 6.2224396e-15
+      e10: 4.95e-43
+      e11: 0
+      e12: 0
+      e13: 4.5904e-41
+      e20: 0
+      e21: 0
+      e22: -1.2494573e+21
+      e23: NaN
+      e30: 0
+      e31: 0
+      e32: 4.95e-43
+      e33: 0
+  - m_RefCount: 0
+    m_Data:
+      e00: -1.1809895e-27
+      e01: 0
+      e02: 0
+      e03: 6.2224396e-15
+      e10: 4.95e-43
+      e11: 0
+      e12: 0
+      e13: 4.5904e-41
+      e20: 0
+      e21: 0
+      e22: -4.2842715e+20
+      e23: NaN
+      e30: 0
+      e31: 0
+      e32: 4.95e-43
+      e33: 0
+  - m_RefCount: 0
+    m_Data:
+      e00: NaN
+      e01: NaN
+      e02: -6.1425465e-29
+      e03: 0
+      e10: NaN
+      e11: NaN
+      e12: 6e-45
+      e13: 0
+      e20: 0
+      e21: -6.142537e-29
+      e22: 0
+      e23: 0
+      e30: 0
+      e31: 6e-45
       e32: 0
       e33: 0
   m_TileColorArray:
   - m_RefCount: 0
-    m_Data: {r: -1.6251351e+23, g: -1.6251351e+23, b: -1.6251351e+23, a: -1.6251351e+23}
+    m_Data: {r: -1.2466572e+21, g: -1.2466572e+21, b: -1.2466572e+21, a: -1.2466572e+21}
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -16, y: -6, z: 0}
@@ -337,7 +391,7 @@ MonoBehaviour:
   groundMap: {fileID: 46843551}
   colliderMap: {fileID: 2057181087}
   groundTiles:
-  - {fileID: 11400000, guid: 4df03c935868e4f498ce2e239828d38b, type: 2}
+  - {fileID: 11400000, guid: c8a4c3a041d72ad4dad5e17203de023e, type: 2}
   colliderTiles: []
 --- !u!4 &253165728
 Transform:
@@ -689,7 +743,7 @@ CompositeCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2057181084}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0

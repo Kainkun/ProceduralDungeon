@@ -12,8 +12,9 @@ public class SceneBuilder : MonoBehaviour
 
     [SerializeField]
     Tilemap groundMap, colliderMap;
+
     [SerializeField]
-    Tile[] groundTiles, colliderTiles;
+    RuleTile[] groundTiles, colliderTiles;
 
     void Start()
     {
