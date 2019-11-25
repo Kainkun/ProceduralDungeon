@@ -29,6 +29,8 @@ public class SceneBuilder : MonoBehaviour
 
     [SerializeField]
     GameObject doorObject;
+
+
     Transform[] doors = new Transform[4];
 
     private void Awake()
@@ -75,7 +77,7 @@ public class SceneBuilder : MonoBehaviour
         else
             buildScene(goBack());
 
-        print(currentRoom.layerNumber + ", " + currentRoom.roomNumber);
+        //print(currentRoom.layerNumber + ", " + currentRoom.roomNumber);
         setPlayer();
     }
 
@@ -87,19 +89,18 @@ public class SceneBuilder : MonoBehaviour
         terrainMap = null;
     }
 
-    void rectangleTiles()
+    void makeRectangle(int block, int xpos, int ypos, int width, int height)
     {
-        terrainMap = new int[currentWidth, currentHeight];
-
-        for (int y = 0; y < currentHeight; y++)
+        for (int y = 0; y < height; y++)
         {
-            for (int x = 0; x < currentWidth; x++)
+            for (int x = 0; x < width; x++)
             {
-                terrainMap[x, y] = Random.Range(1, 2);
+                if(terrainMap.GetLength(0) - 1 > x + xpos && terrainMap.GetLength(1) - 1 > y + ypos && x + xpos > 0 && y + ypos > 0)
+                    terrainMap[x + xpos, y + ypos] = block;
             }
         }
-
     }
+
 
     void randomWalkTiles(float fillPercent, float walkerSpawnChance, int maxWalkers)
     {
@@ -119,11 +120,13 @@ public class SceneBuilder : MonoBehaviour
             }
         }
 
-        while (currentFill < maxFill)
+        int steps = 0;
+        while (currentFill < maxFill || steps < 100)
         {
+            steps++;
             for (int i = 0; i < walkers.Count; i++)
             {
-                walkers[i].walk();
+                walkers[i].walk(0.2f);
                 if (terrainMap[walkers[i].x, walkers[i].y] != 0)
                 {
                     terrainMap[walkers[i].x, walkers[i].y] = 0;
@@ -145,21 +148,27 @@ public class SceneBuilder : MonoBehaviour
         public int x;
         public int y;
 
+        public int lastdirection;
+
         public Walker(int setX, int setY)
         {
             x = setX;
             y = setY;
+            lastdirection = Random.Range(1, 5);
         }
-        public Walker(Vector2Int startPosition)
+        public void walk(float straightBias)
         {
-            x = startPosition.x;
-            y = startPosition.y;
-        }
-        public void walk()
-        {
+            int moveDirection;
 
-            int moveDirection = Random.Range(1, 5);
-            if(moveDirection == 3)
+            if (straightBias > Random.Range(0f, 1f))
+                moveDirection = lastdirection;
+            else
+            {
+                moveDirection = Random.Range(1, 5);
+                lastdirection = moveDirection;
+            }
+
+            if (moveDirection == 3)
             {
                 if (y > 1)
                     y--;
@@ -203,6 +212,18 @@ public class SceneBuilder : MonoBehaviour
         }
     }
 
+    void removeSoloBlocks()
+    {
+        for (int y = 1; y < currentHeight - 1; y++)
+        {
+            for (int x = 1; x < currentWidth - 1; x++)
+            {
+                if (terrainMap[x+1, y] == 0 && terrainMap[x - 1, y] == 0 && terrainMap[x, y + 1] == 0 && terrainMap[x, y - 1] == 0)
+                    terrainMap[x, y] = 0;
+            }
+        }
+    }
+
     void setTiles()
     {
         for (int y = 0; y < currentHeight; y++)
@@ -210,9 +231,9 @@ public class SceneBuilder : MonoBehaviour
             for (int x = 0; x < currentWidth; x++)
             {
                 if (terrainMap[x, y] == 1)
-                    colliderMap.SetTile(new Vector3Int(x - currentWidth / 2, y - 1, 0), wallTiles[Random.Range(0, wallTiles.Length)]);
+                    colliderMap.SetTile(new Vector3Int(x, y, 0), wallTiles[Random.Range(0, wallTiles.Length)]);
                 else
-                    groundMap.SetTile(new Vector3Int(x - currentWidth / 2, y - 1, 0), groundTiles[0]);
+                    groundMap.SetTile(new Vector3Int(x, y, 0), groundTiles[0]);
             }
         }
     }
@@ -226,12 +247,12 @@ public class SceneBuilder : MonoBehaviour
 
         clearMap();
         randomWalkTiles(0.2f, 0.02f, 5);
-        //rectangleTiles();
 
         setPlayer();
+        removeSoloBlocks();
+        buildDoors();
 
         setTiles();
-        buildDoors();
     }
 
     void initDoors()
@@ -241,35 +262,100 @@ public class SceneBuilder : MonoBehaviour
             doors[i] = Instantiate(doorObject, new Vector3(0, 5, 0), Quaternion.identity).transform;
             doors[i].GetComponent<Door>().direction = i;
         }
+
+        doors[3].GetComponent<Door>().close();
     }
 
     void buildDoors()
     {
-        doors[0].position = new Vector3(-3, 3, 0);
-        doors[1].position = new Vector3(0, 3, 0);
-        doors[2].position = new Vector3(3, 3, 0);
-        doors[3].position = new Vector3(0, -3, 0);
+        bool found = false;
+        while(!found)
+        {
+            int door0yPos = Random.Range((int)(currentHeight * 0.2f), (int)(currentHeight * 0.8f));
+
+            for (int x = 4; x < currentWidth / 2 - 2; x++)
+            {
+                if (terrainMap[x, door0yPos] == 0)
+                {
+                    makeRectangle(0, x - 2, door0yPos, 3, 2);
+                    doors[0].position = new Vector3(x - 2 + 0.5f, door0yPos + 0.5f, 0);
+                    found = true;
+                    break;
+                }
+            }
+        }
+
+        found = false;
+        while (!found)
+        {
+            int door1xPos = Random.Range((int)(currentWidth * 0.2f), (int)(currentWidth * 0.8f));
+
+            for (int y = currentHeight - 6; y > currentHeight / 2 - 2; y--)
+            {
+                if (terrainMap[door1xPos, y] == 0)
+                {
+                    makeRectangle(0, door1xPos, y + 1, 2, 3);
+                    doors[1].position = new Vector3(door1xPos + 0.5f, y + 2 + 0.5f, 0);
+                    found = true;
+                    break;
+                }
+            }
+        }
+
+        found = false;
+        while (!found)
+        {
+            int door0yPos = Random.Range((int)(currentHeight * 0.2f), (int)(currentHeight * 0.8f));
+
+            for (int x = currentWidth - 6; x > currentWidth / 2 + 2; x--)
+            {
+                if (terrainMap[x, door0yPos] == 0)
+                {
+                    makeRectangle(0, x + 1, door0yPos, 3, 2);
+                    doors[2].position = new Vector3(x + 2 + 0.5f, door0yPos + 0.5f, 0);
+                    found = true;
+                    break;
+                }
+            }
+        }
+
+
+        int door3xPos = (int)Player.player.transform.position.x;
+        for (int y = 3; y < currentHeight - 2; y++)
+        {
+            if (terrainMap[door3xPos, y] == 0)
+            {
+                makeRectangle(0, door3xPos, y - 2, 2, 4);
+                doors[3].position = new Vector3(door3xPos + 0.5f, y + 0.5f - 2, 0);
+                break;
+            }
+        }
 
     }
 
 
     void setPlayer()
     {
-        /*for (int y = 0; y < currentHeight; y++)
+        int closestXfromCenter = 10000;
+        int currentY = 0;
+        for (int y = 4; y < currentHeight - 1; y++)
         {
-            int flipyX = 0;
-            for (int x = 0; x < currentWidth; x++)
+            for (int x = 1; x < currentWidth - 1; x++)
             {
-                if (currentWidth % 2 == 0)
-                    flipyX = (int)Mathf.Ceil(currentWidth - x/2(0.5-x%2));
-                    flipyX = Mathf.Ceil(currentWidth - x / 2((0.5 - x % 2)) * 2) );
-
-                int flipyX = currentWidth%2 == 0  ?  Mathf.Ceil(currentWidth - x/2((0.5-x%2))*2) ) : Mathf.Floor(currentWidth - x/2((0.5-x%2))*2) ); //left right left right from center  
+                if (terrainMap[x, y] == 0 && Mathf.Abs((currentWidth / 2) - x) < Mathf.Abs(currentWidth / 2 - closestXfromCenter))
+                    closestXfromCenter = x;
             }
-        }*/
-        
 
-        Player.player.transform.position = new Vector3(0, 0, 0);
+            if (closestXfromCenter < Mathf.Abs( currentWidth / 2 - 10000))
+            {
+                currentY = y;
+                break;
+            }
+        }
+
+        //print(closestXfromCenter + ", " + currentY);
+        Player.player.transform.position = new Vector3(closestXfromCenter, currentY, 0);
+        Camera.main.transform.position = new Vector3(closestXfromCenter, currentY, -10);
     }
 
 

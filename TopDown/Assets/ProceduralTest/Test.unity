@@ -386,10 +386,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdbb1bbe0e4515e4c804fed914e64356, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minWidth: 50
-  maxWidth: 50
-  minHeight: 50
-  maxHeight: 50
+  minWidth: 30
+  maxWidth: 60
+  minHeight: 30
+  maxHeight: 60
   groundMap: {fileID: 46843551}
   colliderMap: {fileID: 2057181087}
   groundTiles:
@@ -513,7 +513,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99645577925617343a6f5fff762c877f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraSpeed: 1
+  mouseCamControl: 5
+  cameraSpeed: 5
 --- !u!1 &442473134
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,7 +552,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 442473134}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.5, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 46843549}
@@ -569,11 +570,6 @@ PrefabInstance:
     - target: {fileID: 8640534546082240474, guid: 6c815a7971791994794971ebc5ca2785,
         type: 3}
       propertyPath: m_Name
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 8640534546082240474, guid: 6c815a7971791994794971ebc5ca2785,
-        type: 3}
-      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 8640534546082240455, guid: 6c815a7971791994794971ebc5ca2785,
@@ -630,6 +626,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640534546082240454, guid: 6c815a7971791994794971ebc5ca2785,
+        type: 3}
+      propertyPath: moveSpeed
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6c815a7971791994794971ebc5ca2785, type: 3}
@@ -768,7 +769,9 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths: []
+  m_ColliderPaths:
+  - m_Collider: {fileID: 2057181089}
+    m_ColliderPaths: []
   m_CompositePaths:
     m_Paths: []
   m_VertexDistance: 0.0005
@@ -780,7 +783,7 @@ TilemapCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2057181084}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0

@@ -50,17 +50,22 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        Movement();
         Aim();
 
         if (Input.GetButtonDown("Fire1"))
             Shoot();
+
+        goTo.x = Input.GetAxis("Horizontal");
+        goTo.y = Input.GetAxis("Vertical");
+    }
+
+    private void FixedUpdate()
+    {
+        Movement();
     }
 
     void Movement()
     {
-        goTo.x = Input.GetAxis("Horizontal");
-        goTo.y = Input.GetAxis("Vertical");
 
         rb.position = transform.position + goTo * moveSpeed * Time.deltaTime;
     }

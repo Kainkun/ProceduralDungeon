@@ -121,3 +121,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6f99592feb03874fa1c7d0921b01251, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isOpen: 1
+  openDoor: {fileID: 2991112737030314275, guid: c059ca5d12b455e45995c09a6e4ebc14,
+    type: 3}
+  closedDoor: {fileID: -187910677485877637, guid: c059ca5d12b455e45995c09a6e4ebc14,
+    type: 3}
+  sr: {fileID: 987226714501674139}
+  direction: 0
