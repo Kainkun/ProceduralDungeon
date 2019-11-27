@@ -240,7 +240,10 @@ public class SceneBuilder : MonoBehaviour
             for (int x = 1; x < currentWidth - 1; x++)
             {
                 if (terrainMap[x , y] == 0 && terrainMap[x + 1, y] == 0 && terrainMap[x, y + 1] == 0 && terrainMap[x + 1, y + 1] == 0)
+                {
+                    print(x + ", " + y + ": " + terrainMap[x, y]);
                     terrainMap[x, y] = 5;
+                }
             }
         }
     }
@@ -272,8 +275,8 @@ public class SceneBuilder : MonoBehaviour
 
         setPlayer();
         removeSoloBlocks();
-        populate();
         buildDoors();
+        populate();
 
         setTiles();
     }
