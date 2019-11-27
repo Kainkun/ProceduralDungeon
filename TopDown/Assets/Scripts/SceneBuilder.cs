@@ -28,7 +28,7 @@ public class SceneBuilder : MonoBehaviour
     roomData currentRoom;
 
     [SerializeField]
-    GameObject doorObject;
+    GameObject doorObject, crateObject;
 
 
     Transform[] doors = new Transform[4];
@@ -218,11 +218,33 @@ public class SceneBuilder : MonoBehaviour
         {
             for (int x = 1; x < currentWidth - 1; x++)
             {
-                if (terrainMap[x+1, y] == 0 && terrainMap[x - 1, y] == 0 && terrainMap[x, y + 1] == 0 && terrainMap[x, y - 1] == 0)
-                    terrainMap[x, y] = 0;
+                if (terrainMap[x + 1, y] == 0 && terrainMap[x - 1, y] == 0 && terrainMap[x, y + 1] == 0 && terrainMap[x, y - 1] == 0 && Random.Range(0f,1f) > 0.9f )
+                {
+                    terrainMap[x, y] = 5; //crate
+                    terrainMap[x+1, y] = 5;
+                    terrainMap[x, y+1] = 5;
+                    terrainMap[x+1, y+1] = 5;
+                    Instantiate(crateObject, new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity);
+                }
+
+            }
+        }
+
+    }
+
+
+    void populate()
+    {
+        for (int y = 1; y < currentHeight - 1; y++)
+        {
+            for (int x = 1; x < currentWidth - 1; x++)
+            {
+                if (terrainMap[x , y] == 0 && terrainMap[x + 1, y] == 0 && terrainMap[x, y + 1] == 0 && terrainMap[x + 1, y + 1] == 0)
+                    terrainMap[x, y] = 5;
             }
         }
     }
+
 
     void setTiles()
     {
@@ -250,6 +272,7 @@ public class SceneBuilder : MonoBehaviour
 
         setPlayer();
         removeSoloBlocks();
+        populate();
         buildDoors();
 
         setTiles();

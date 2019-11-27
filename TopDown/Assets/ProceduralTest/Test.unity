@@ -403,6 +403,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 84263aa3f237aa6448b97481b86b9893, type: 2}
   doorObject: {fileID: 987226714501674116, guid: 368db7ec34f80be419348ac5f6a011f8,
     type: 3}
+  crateObject: {fileID: 7276227845025364553, guid: 7684d940696287846a9498e78734f329,
+    type: 3}
 --- !u!4 &253165728
 Transform:
   m_ObjectHideFlags: 0
